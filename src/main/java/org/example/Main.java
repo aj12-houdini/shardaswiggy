@@ -7,7 +7,6 @@ import java.util.*;
 import java.util.Scanner;
 import java.io.FileReader;
 import org.example.Restro;
-//Restaurant, Order, Delivery, Custom
 class Parse{
 
     Dish[] dishes = new Dish[10];
@@ -26,7 +25,7 @@ class Parse{
                 i++;
             }
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.print("");
         }
     }
 
@@ -39,7 +38,7 @@ class Parse{
             int i = 0;
             while ((newline = br.readLine()) != null) {
                 arr = newline.split(",");
-                Restro d = new Restro(arr[0],arr[1],arr[2]);
+                Restro d = new Restro(arr[0],arr[1],arr[2],arr[3]);
                 restaurants[i] = d;
                 i++;
             }
@@ -50,17 +49,58 @@ class Parse{
 }
 
 
+
 public class Main {
     public static void main(String[] args) {
-
-        System.out.println("Welcome to Sharda Swiggy");
+        Scanner sc = new Scanner(System.in);
         Parse p = new Parse();
         p.parse_dishes();
-        for(Dish i: p.dishes){
-            if(i != null)
-                System.out.println(i.dish_name + " " +  i.id  + " "  + i.ratings);
-        }
+        p.parse_restaurant();
+        int choice;
+        do {
+            System.out.println("Welcome to Sharda Swiggy");
+            System.out.println("Press 0 for displaying menu, 1 for searching the menu, 2 for exit");
+            choice = sc.nextInt();
+            Restro[] restaurants = p.restaurants;
+            Dish[] dishes = p.dishes;
+            switch (choice) {
+                case 0:
+                    System.out.println("MENU DISPLAYED BELOW -------------------");
+                    for (int i = 0; i < 10; i++) {
+                        if (restaurants[i] != null) {
+                            float k = (i + 1) / 10;
+                            System.out.println(String.format("%s %5s %5s",restaurants[i].id, restaurants[i].name + "\uD83C\uDF7D\uFE0F",  restaurants[i].ratings + "✨" ));
+                            for (int j = 0; j < 10; j++) {
+                                if (dishes[j] != null && restaurants[i].id.equals(dishes[j].id)) {
+                                    k += 0.1;
+                                    System.out.println(String.format("\t%.1f %5s %5s", Integer.parseInt(dishes[j].id) + k, dishes[j].dish_name, dishes[j].price + "\uD83D\uDCB5"));
+                                }
+                            }
+                            System.out.println("-----------------------------------");
+                        }
+                    }
+                    break;
+                case 1:
+                    System.out.println("Choose restaurant to search from : ");
+                    for(int i = 0; i<10; i++){
+                        if(restaurants[i] != null)
+                            System.out.println(String.format("%s %5s %5s",restaurants[i].id, restaurants[i].name + "\uD83C\uDF7D\uFE0F",  restaurants[i].ratings + "✨" ));
+                    }
+                    int index = sc.nextInt();
+
+//                    for(int i = 0; i<10; i++){
+//                        if(Integer.parseInt(restaurants[i].id) == index)
+//
+//                    }
+//                    System.out.println("Choose a dish from selected restaurants: ");
+                    break;
+                case 2:
+                    System.out.println("Exit!");
+                    break;
+            }
+        }while(choice != 2);
+    }
     }
 
-}
+
 
